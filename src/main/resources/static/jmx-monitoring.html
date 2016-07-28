@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>App Monitoring</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+</head>
+<body>
+        <h1>App Monitoring</h1>
+        <ul id="live-updates"></ul>
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+             var live = {
+                 init : function() {
+                             var source = new EventSource("http://127.0.0.1:8016/jmx/mapReduce");
+							 addItem("ID		Name		State");
+                             source.addEventListener("message", function(event) {
+                                     var data = jQuery.parseJSON(event.data);
+                                                live.addItem("Thread count: "+data.threadCount);
+												for(var i=0; i<data.threadMetaInfoList; i++) {
+													live.addItem(data.threadMetaInfoList[i].threadId+"	"+data.threadMetaInfoList[i].threadName+"	"+data.threadMetaInfoList[i].threadId.threadState);
+												}
+												//live.addItem(data.threadMetaInfoList);
+                             }, false);
+                     },
+
+                     addItem : function(data) {
+                                     $(live.constructItem(data)).hide().prependTo("#live-updates").fadeIn(100);
+                     },
+
+                     constructItem : function(data) {
+                         return "<li>" + data + "</li>";
+                     }
+            };
+
+            $(document).ready(function(){
+                    live.init();
+            });
+         </script>
+    </body>
+</html>
