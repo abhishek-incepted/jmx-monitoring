@@ -63,7 +63,7 @@ public class JMXClient {
     }
 
     public <T> List<T> getMXBeanCollection(String objectName, Class<T> clazz) throws MalformedObjectNameException, IOException {
-        List<T> garbageCollectorMXBeanList = new LinkedList<>();
+        List<T> garbageCollectorMXBeanList = new LinkedList<T>();
         // Construct the ObjectName for the Hello MBean
         ObjectName mbeanName = new ObjectName(objectName);
         for(ObjectName name : this.mbsc.queryNames(mbeanName, null)) {
